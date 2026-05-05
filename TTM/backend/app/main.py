@@ -5,11 +5,7 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from app.config import settings
-from app.database import create_all_tables
 from app.routes import auth, projects, tasks, team, dashboard, health
-
-# Create tables
-create_all_tables()
 
 # Create FastAPI app
 app = FastAPI(
@@ -37,6 +33,17 @@ async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
         status_code=429,
         content={"detail": "Too many requests. Please try again later."},
     )
+
+
+# Initialize database tables on app startup
+@app.on_event("startup")
+async def startup_event():
+    """Initialize database on app startup"""
+    from app.database import create_all_tables
+    try:
+        create_all_tables()
+    except Exception as e:
+        print(f"Warning: Could not create database tables: {e}")
 
 
 # Include routers
