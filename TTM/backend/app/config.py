@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     jwt_secret: str = os.getenv("JWT_SECRET", "your-secret-key-change-in-production")
     jwt_refresh_secret: str = os.getenv("JWT_REFRESH_SECRET", "your-refresh-secret-change-in-production")
     jwt_algorithm: str = "HS256"
-    jwt_expiration_hours: int = 0.25  # 15 minutes
+    jwt_expiration_hours: int = 1  # 1 hour (was 0.25 hours/15 minutes as float)
     jwt_refresh_expiration_days: int = 7
 
     # App
