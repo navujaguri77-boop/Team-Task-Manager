@@ -1,0 +1,30 @@
+[build]
+builder = "nixpacks"
+
+[[services]]
+name = "web"
+plan = "starter"
+
+  [services.build]
+  builder = "nixpacks"
+
+  [services.deploy]
+  startCommand = "cd backend && pip install -r requirements.txt && python main.py"
+  restartPolicyType = "on_failure"
+  restartPolicyMaxRetries = 3
+
+[[services]]
+name = "db"
+type = "postgresql"
+plan = "starter"
+
+[[envs]]
+name = "production"
+
+  [[envs.variables]]
+  key = "ENVIRONMENT"
+  value = "production"
+
+  [[envs.variables]]
+  key = "PORT"
+  value = "8000"
